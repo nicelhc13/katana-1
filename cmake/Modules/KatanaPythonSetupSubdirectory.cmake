@@ -214,9 +214,15 @@ function(add_python_setuptools_target TARGET_NAME)
       ALL
       COMMAND ${PYTHON_SETUP_COMMAND} ${quiet} build "$<$<CONFIG:Debug>:--debug>" ${parallel}
       COMMAND install ${PYTHON_ENV_SCRIPT}.tmp ${PYTHON_ENV_SCRIPT}
-      BYPRODUCTS ${PYTHON_BINARY_DIR} ${PYTHON_ENV_SCRIPT} ${CMAKE_BINARY_DIR}/katana_setup_requirements_cache.txt
+      BYPRODUCTS ${PYTHON_BINARY_DIR} ${PYTHON_ENV_SCRIPT}
       WORKING_DIRECTORY ${PYTHON_BINARY_DIR}
       COMMENT "Building ${TARGET_NAME} in symlink tree ${PYTHON_BINARY_DIR}"
+  )
+
+  set_property(
+      TARGET ${TARGET_NAME}
+      APPEND
+      PROPERTY ADDITIONAL_CLEAN_FILES ${PYTHON_BINARY_DIR} ${CMAKE_BINARY_DIR}/katana_setup_requirements_cache.txt
   )
 
   add_dependencies(${TARGET_NAME} ${TARGET_NAME}_python_tree ${TARGET_NAME}_setup_tree ${TARGET_NAME}_scripts_tree)
